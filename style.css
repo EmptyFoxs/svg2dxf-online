@@ -3,12 +3,11 @@ body {
   background: #f4f4f4;
   margin: 0;
   padding: 0;
-  color: #333;
 }
 
 .container {
   max-width: 480px;
-  margin: 40px auto;
+  margin: 40px auto; /* центрирует по горизонтали */
   padding: 20px;
   background: white;
   border-radius: 8px;
@@ -23,7 +22,7 @@ h1 {
 
 label {
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   font-size: 14px;
 }
 
