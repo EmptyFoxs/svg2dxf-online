@@ -1,38 +1,49 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>Расчёт reducer calc (по ГОСТ)</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Переход ГОСТ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <h2>Расчёт reducer calc (по ГОСТ)</h2>
-  <form id="calcForm">
-    <label>Толщина стенки трубы (мм):<br><input type="number" id="thickness" required></label><br>
-    <label>Толщина изоляции (мм, не влияет на покраску):<br><input type="number" id="insulation" required></label><br>
-    <label>Слои грунтовки:<br><input type="number" id="primer" value="1" required></label><br>
-    <label>Слои эмали:<br><input type="number" id="enamel" value="1" required></label><br>
-    <label>Проходы растворителем:<br><input type="number" id="solvent" value="1" required></label><br>
-    <button type="submit">Рассчитать</button>
-  </form>
-  <div class="result" id="result"></div>
-  <script>
-    document.getElementById('calcForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const insulation = parseFloat(document.getElementById('insulation').value);
-      const primer = parseFloat(document.getElementById('primer').value);
-      const enamel = parseFloat(document.getElementById('enamel').value);
-      const solvent = parseFloat(document.getElementById('solvent').value);
+  <div class="calculator">
+    <h2>Расчёт перехода (по ГОСТ)</h2>
+    <label>Диаметр больший (мм):</label>
+    <input type="number" id="d1" value="159">
 
-      const area = 2.5; // фиктивное значение площади покрытия
-      const res = "Площадь покрытия: " + area.toFixed(2) + " м²<br>" +
-                  "Расход грунтовки: " + (area * 130 * primer).toFixed(2) + " г<br>" +
-                  "Расход эмали: " + (area * 100 * enamel).toFixed(2) + " г<br>" +
-                  "Расход растворителя: " + (area * 85 * solvent).toFixed(2) + " г<br>" +
-                  "Расход изоляции: " + insulation.toFixed(2) + " м.п.";
-      document.getElementById('result').innerHTML = res;
-    });
+    <label>Диаметр меньший (мм):</label>
+    <input type="number" id="d2" value="108">
+
+    <label>Длина перехода (мм):</label>
+    <input type="number" id="length" value="100">
+
+    <label>Толщина стенки (мм):</label>
+    <input type="number" id="thickness" value="4">
+
+    <button onclick="calcReducer()">Рассчитать</button>
+
+    <div class="result" id="result"></div>
+    <a href="index.html">← Назад</a>
+  </div>
+
+  <script>
+    function calcReducer() {
+      const D1 = parseFloat(document.getElementById('d1').value);
+      const D2 = parseFloat(document.getElementById('d2').value);
+      const L = parseFloat(document.getElementById('length').value);
+      const t = parseFloat(document.getElementById('thickness').value);
+
+      const avgD = (D1 + D2) / 2;
+      const area = Math.PI * avgD * L;
+      const area_m2 = area / 1e6;
+
+      document.getElementById('result').innerHTML = `
+        Средний диаметр: ${avgD.toFixed(1)} мм<br>
+        Площадь боковой поверхности: ${area.toFixed(2)} мм²<br>
+        <strong>Итого: ${area_m2.toFixed(4)} м²</strong>
+      `;
+    }
   </script>
 </body>
 </html>
