@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>ГОСТ Трубы калькулятор</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>ГОСТ Калькулятор труб</h2>
+    <form onsubmit="calculate(event)">
+        <label>Номинальный диаметр (мм):<input type="number" id="diameter" value="133"></label><br>
+        <label>Толщина стенки трубы (мм):<input type="number" id="wall" value="4.5"></label><br>
+        <label>Толщина изоляции (мм, не влияет на покраску):<input type="number" id="insulation" value="14.4"></label><br>
+        <label>Длина трубы (м):<input type="number" id="length" value="6"></label><br>
+        <label>Слои грунтовки:<input type="number" id="primer" value="1"></label><br>
+        <label>Слои эмали:<input type="number" id="enamel" value="1"></label><br>
+        <label>Проходы растворителем:<input type="number" id="solvent" value="1"></label><br>
+        <button type="submit">Рассчитать</button>
+    </form>
+    <div id="result"></div>
+    <script>
+    function calculate(e) {
+        e.preventDefault();
+        const d = parseFloat(diameter.value);
+        const w = parseFloat(wall.value);
+        const l = parseFloat(length.value);
+        const p = parseInt(primer.value);
+        const e1 = parseInt(enamel.value);
+        const s = parseInt(solvent.value);
+        const D = d - 2 * w;
+        const area = Math.PI * (d + D) / 2 * l / 1000;
+        const primerUsage = area * 130 * p;
+        const enamelUsage = area * 100 * e1;
+        const solventUsage = area * 85 * s;
+        result.innerHTML = `<div class="res">
+            <b>Площадь покрытия:</b> ${area.toFixed(2)} м²<br>
+            Расход грунтовки: ${primerUsage.toFixed(2)} г<br>
+            Расход эмали: ${enamelUsage.toFixed(2)} г<br>
+            Расход растворителя: ${solventUsage.toFixed(2)} г
+        </div>`;
+    }
+    </script>
+</body>
+</html>

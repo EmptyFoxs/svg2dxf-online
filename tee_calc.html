@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>ГОСТ Тройник калькулятор</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h2>Расчёт площади поверхности тройника (ГОСТ)</h2>
+    <form onsubmit="calculate(event)">
+        <label>Диаметр основной трубы (мм):<input type="number" id="mainD" value="133"></label><br>
+        <label>Длина основной трубы (мм):<input type="number" id="mainL" value="200"></label><br>
+        <label>Диаметр ответвления (мм):<input type="number" id="branchD" value="108"></label><br>
+        <label>Длина ответвления (мм):<input type="number" id="branchL" value="100"></label><br>
+        <label>Толщина стенки (мм):<input type="number" id="wall" value="4.5"></label><br>
+        <label>Слои грунтовки:<input type="number" id="primer" value="1"></label><br>
+        <label>Слои эмали:<input type="number" id="enamel" value="1"></label><br>
+        <label>Проходы растворителем:<input type="number" id="solvent" value="1"></label><br>
+        <button type="submit">Рассчитать</button>
+    </form>
+    <div id="result"></div>
+    <script>
+    function calculate(e) {
+        e.preventDefault();
+        const D1 = parseFloat(mainD.value);
+        const L1 = parseFloat(mainL.value);
+        const D2 = parseFloat(branchD.value);
+        const L2 = parseFloat(branchL.value);
+        const w = parseFloat(wall.value);
+        const areaMain = Math.PI * (D1 - w) * L1 / 1000;
+        const areaBranch = Math.PI * (D2 - w) * L2 / 1000;
+        const total = (areaMain + areaBranch);
+        const p = total * 130 * primer.value;
+        const e1 = total * 100 * enamel.value;
+        const s = total * 85 * solvent.value;
+        result.innerHTML = `<div class="res">
+            <b>Площадь покрытия:</b> ${total.toFixed(2)} м²<br>
+            Расход грунтовки: ${p.toFixed(2)} г<br>
+            Расход эмали: ${e1.toFixed(2)} г<br>
+            Расход растворителя: ${s.toFixed(2)} г
+        </div>`;
+    }
+    </script>
+</body>
+</html>
