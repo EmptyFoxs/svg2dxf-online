@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Тройник ГОСТ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="calculator">
+    <h2>Расчёт тройника (по ГОСТ)</h2>
+    <label>Диаметр основной трубы (мм):</label>
+    <input type="number" id="main_d" value="159">
+
+    <label>Диаметр ответвления (мм):</label>
+    <input type="number" id="branch_d" value="108">
+
+    <label>Длина основной трубы (мм):</label>
+    <input type="number" id="main_l" value="200">
+
+    <label>Длина ответвления (мм):</label>
+    <input type="number" id="branch_l" value="100">
+
+    <label>Толщина стенки (мм):</label>
+    <input type="number" id="thickness" value="4">
+
+    <button onclick="calcTee()">Рассчитать</button>
+
+    <div class="result" id="result"></div>
+    <a href="index.html">← Назад</a>
+  </div>
+
+  <script>
+    function calcTee() {
+      const Dm = parseFloat(document.getElementById('main_d').value);
+      const Db = parseFloat(document.getElementById('branch_d').value);
+      const Lm = parseFloat(document.getElementById('main_l').value);
+      const Lb = parseFloat(document.getElementById('branch_l').value);
+      const t = parseFloat(document.getElementById('thickness').value);
+
+      const areaMain = Math.PI * Dm * Lm;
+      const areaBranch = Math.PI * Db * Lb;
+      const total = areaMain + areaBranch;
+      const total_m2 = total / 1e6;
+
+      document.getElementById('result').
+            const primer = parseFloat(document.getElementById('primer').value);
+            const solvent = parseFloat(document.getElementById('solvent').value);
+            const грунтовка = (area * 130 * primer).toFixed(2);
+            const растворитель = (area * 85 * solvent).toFixed(2);
+            innerHTML =
+             `
+        Площадь основной трубы: ${areaMain.toFixed(1)} мм²<br>
+        Площадь ответвления: ${areaBranch.toFixed(1)} мм²<br>
+        <strong>Суммарная площадь: ${total.toFixed(1)} мм² / ${total_m2.toFixed(4)} м²</strong>
+      `;
+    }
+  </script>
+</body>
+</html>
