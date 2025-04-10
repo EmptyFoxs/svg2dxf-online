@@ -88,7 +88,13 @@
       const arcLength = (Math.PI * radius * angle) / 180;
       const area = Math.PI * avgD * arcLength;
 
-      document.getElementById('result').innerHTML = `
+      document.getElementById('result').
+            const primer = parseFloat(document.getElementById('primer').value);
+            const solvent = parseFloat(document.getElementById('solvent').value);
+            const грунтовка = (area * 130 * primer).toFixed(2);
+            const растворитель = (area * 85 * solvent).toFixed(2);
+            innerHTML =
+             `
         Наружный диаметр: ${outerD.toFixed(1)} мм<br>
         Внутренний диаметр: ${innerD.toFixed(1)} мм<br>
         Средний диаметр: ${avgD.toFixed(1)} мм<br>
