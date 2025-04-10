@@ -1,43 +1,49 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>ГОСТ Переход калькулятор</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Переход ГОСТ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <h2>Расчёт площади поверхности перехода (ГОСТ)</h2>
-    <form onsubmit="calculate(event)">
-        <label>Большой диаметр (мм):<input type="number" id="d1" value="133"></label><br>
-        <label>Малый диаметр (мм):<input type="number" id="d2" value="108"></label><br>
-        <label>Высота перехода (мм):<input type="number" id="h" value="100"></label><br>
-        <label>Толщина стенки (мм):<input type="number" id="wall" value="4.5"></label><br>
-        <label>Слои грунтовки:<input type="number" id="primer" value="1"></label><br>
-        <label>Слои эмали:<input type="number" id="enamel" value="1"></label><br>
-        <label>Проходы растворителем:<input type="number" id="solvent" value="1"></label><br>
-        <button type="submit">Рассчитать</button>
-    </form>
-    <div id="result"></div>
-    <script>
-    function calculate(e) {
-        e.preventDefault();
-        const d1 = parseFloat(document.getElementById('d1').value);
-        const d2 = parseFloat(document.getElementById('d2').value);
-        const h = parseFloat(document.getElementById('h').value);
-        const w = parseFloat(document.getElementById('wall').value);
-        const R1 = (d1 - w) / 2, R2 = (d2 - w) / 2;
-        const area = Math.PI * (R1 + R2) * Math.sqrt((R1 - R2)**2 + h**2) / 1000;
-        const total = area;
-        const p = total * 130 * primer.value;
-        const e1 = total * 100 * enamel.value;
-        const s = total * 85 * solvent.value;
-        result.innerHTML = `<div class="res">
-            <b>Площадь покрытия:</b> ${total.toFixed(2)} м²<br>
-            Расход грунтовки: ${p.toFixed(2)} г<br>
-            Расход эмали: ${e1.toFixed(2)} г<br>
-            Расход растворителя: ${s.toFixed(2)} г
-        </div>`;
+  <div class="calculator">
+    <h2>Расчёт перехода (по ГОСТ)</h2>
+    <label>Диаметр больший (мм):</label>
+    <input type="number" id="d1" value="159">
+
+    <label>Диаметр меньший (мм):</label>
+    <input type="number" id="d2" value="108">
+
+    <label>Длина перехода (мм):</label>
+    <input type="number" id="length" value="100">
+
+    <label>Толщина стенки (мм):</label>
+    <input type="number" id="thickness" value="4">
+
+    <button onclick="calcReducer()">Рассчитать</button>
+
+    <div class="result" id="result"></div>
+    <a href="index.html">← Назад</a>
+  </div>
+
+  <script>
+    function calcReducer() {
+      const D1 = parseFloat(document.getElementById('d1').value);
+      const D2 = parseFloat(document.getElementById('d2').value);
+      const L = parseFloat(document.getElementById('length').value);
+      const t = parseFloat(document.getElementById('thickness').value);
+
+      const avgD = (D1 + D2) / 2;
+      const area = Math.PI * avgD * L;
+      const area_m2 = area / 1e6;
+
+      document.getElementById('result').innerHTML = `
+        Средний диаметр: ${avgD.toFixed(1)} мм<br>
+        Площадь боковой поверхности: ${area.toFixed(2)} мм²<br>
+        <strong>Итого: ${area_m2.toFixed(4)} м²</strong>
+      `;
     }
-    </script>
+  </script>
 </body>
 </html>

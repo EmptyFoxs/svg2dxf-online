@@ -1,44 +1,87 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>ГОСТ Трубы калькулятор</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Калькулятор труб ГОСТ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+  <div class="calculator">
     <h2>ГОСТ Калькулятор труб</h2>
-    <form onsubmit="calculate(event)">
-        <label>Номинальный диаметр (мм):<input type="number" id="diameter" value="133"></label><br>
-        <label>Толщина стенки трубы (мм):<input type="number" id="wall" value="4.5"></label><br>
-        <label>Толщина изоляции (мм, не влияет на покраску):<input type="number" id="insulation" value="14.4"></label><br>
-        <label>Длина трубы (м):<input type="number" id="length" value="6"></label><br>
-        <label>Слои грунтовки:<input type="number" id="primer" value="1"></label><br>
-        <label>Слои эмали:<input type="number" id="enamel" value="1"></label><br>
-        <label>Проходы растворителем:<input type="number" id="solvent" value="1"></label><br>
-        <button type="submit">Рассчитать</button>
-    </form>
-    <div id="result"></div>
-    <script>
-    function calculate(e) {
-        e.preventDefault();
-        const d = parseFloat(diameter.value);
-        const w = parseFloat(wall.value);
-        const l = parseFloat(length.value);
-        const p = parseInt(primer.value);
-        const e1 = parseInt(enamel.value);
-        const s = parseInt(solvent.value);
-        const D = d - 2 * w;
-        const area = Math.PI * (d + D) / 2 * l / 1000;
-        const primerUsage = area * 130 * p;
-        const enamelUsage = area * 100 * e1;
-        const solventUsage = area * 85 * s;
-        result.innerHTML = `<div class="res">
-            <b>Площадь покрытия:</b> ${area.toFixed(2)} м²<br>
-            Расход грунтовки: ${primerUsage.toFixed(2)} г<br>
-            Расход эмали: ${enamelUsage.toFixed(2)} г<br>
-            Расход растворителя: ${solventUsage.toFixed(2)} г
-        </div>`;
-    }
-    </script>
+    <label>ГОСТ:</label>
+    <input type="text" id="gost" disabled>
+    <label>Номинальный диаметр (мм):</label>
+    <select id="nominalDiameter" onchange="updateParameters()">
+      <option value="15">15</option><option value="20">20</option><option value="25">25</option>
+      <option value="32">32</option><option value="40">40</option><option value="50">50</option>
+      <option value="57">57</option><option value="76">76</option><option value="89">89</option>
+      <option value="108">108</option><option value="133">133</option><option value="159">159</option>
+      <option value="219">219</option><option value="325">325</option>
+    </select>
+    <label>Толщина стенки (мм):</label>
+    <input type="number" id="thickness" step="0.1" oninput="recalculateParameters()">
+    <label>Внешний диаметр (мм):</label>
+    <input type="text" id="outerDiameter" disabled>
+    <label>Внутренний диаметр (мм):</label>
+    <input type="text" id="innerDiameter" disabled>
+    <label>Длина трубы (м):</label>
+    <input type="number" id="length" value="6" step="0.1" oninput="calculateConsumption()">
+    <label>Слои грунтовки:</label>
+    <input type="number" id="primerLayers" min="1" value="1" oninput="calculateConsumption()">
+    <label>Слои эмали:</label>
+    <input type="number" id="enamelLayers" min="1" value="1" oninput="calculateConsumption()">
+    <label>Проходы растворителем:</label>
+    <input type="number" id="solventPasses" min="1" value="1" oninput="calculateConsumption()">
+    <button onclick="calculateConsumption()">Рассчитать</button>
+    <div class="result" id="result"></div>
+  </div>
+<script>
+const gostData = {
+  "ГОСТ 3262-75": { "15": 1.8, "20": 2.0, "25": 2.5, "32": 2.8, "40": 3.0, "50": 3.5 },
+  "ГОСТ 10704-91": { "57": 3.5, "76": 3.5, "89": 3.5, "108": 4.0, "133": 4.5, "159": 4.5, "219": 4.5, "325": 6.0 }
+};
+function updateParameters() {
+  const d = parseFloat(document.getElementById('nominalDiameter').value);
+  const gost = d <= 50 ? "ГОСТ 3262-75" : "ГОСТ 10704-91";
+  document.getElementById('gost').value = gost;
+  document.getElementById('thickness').value = gostData[gost][d];
+  recalculateParameters();
+}
+function recalculateParameters() {
+  const d = parseFloat(document.getElementById('nominalDiameter').value);
+  const t = parseFloat(document.getElementById('thickness').value);
+  const outer = document.getElementById('outerDiameter');
+  const inner = document.getElementById('innerDiameter');
+  const gost = document.getElementById('gost').value;
+  if (gost === "ГОСТ 3262-75") {
+    outer.value = (d + 2 * t).toFixed(1);
+    inner.value = d.toFixed(1);
+  } else {
+    outer.value = d.toFixed(1);
+    inner.value = (d - 2 * t).toFixed(1);
+  }
+  calculateConsumption();
+}
+function calculateConsumption() {
+  const L = parseFloat(document.getElementById('length').value);
+  const D = parseFloat(document.getElementById('outerDiameter').value);
+  const primer = parseInt(document.getElementById('primerLayers').value);
+  const enamel = parseInt(document.getElementById('enamelLayers').value);
+  const solvent = parseInt(document.getElementById('solventPasses').value);
+  if (isNaN(L) || isNaN(D)) return;
+  const area = Math.PI * D * L / 1000;
+  const g1 = (area * 130 * primer).toFixed(2);
+  const g2 = (area * 100 * enamel).toFixed(2);
+  const g3 = (area * 85 * solvent).toFixed(2);
+  document.getElementById('result').innerHTML = `
+    Площадь покрытия: ${area.toFixed(2)} м² <br>
+    Расход грунтовки: ${g1} г<br>
+    Расход эмали: ${g2} г<br>
+    Расход растворителя: ${g3} г
+  `;
+}
+updateParameters();
+</script>
 </body>
 </html>
