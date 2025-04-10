@@ -2,13 +2,41 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ГОСТ Калькуляторы</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .index-container {
+      max-width: 600px;
+      margin: 60px auto;
+      background-color: white;
+      padding: 35px 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+    .index-container h1 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .index-container ul {
+      list-style: none;
+      padding: 0;
+    }
+    .index-container li {
+      margin: 12px 0;
+    }
+    .index-container a {
+      color: #007aff;
+      font-size: 18px;
+      text-decoration: none;
+    }
+    .index-container a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
-  <div class="calculator">
-    <h2>Выберите калькулятор</h2>
+  <div class="index-container">
+    <h1>ГОСТ Калькуляторы</h1>
     <ul>
       <li><a href="gost_pipe.html">Калькулятор труб по ГОСТ</a></li>
       <li><a href="elbow_calc.html">Расчёт отводов по ГОСТ</a></li>
