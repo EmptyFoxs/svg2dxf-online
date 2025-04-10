@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Расчёт боковой площади отводов</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Расчёт боковой площади стальных отводов (ГОСТ)</h1>
+        <form id="elbowForm">
+            <label>Номинальный диаметр (мм):
+                <select id="nominal_diameter">
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="32">32</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                    <option value="65">65</option>
+                    <option value="80">80</option>
+                    <option value="100">100</option>
+                    <option value="125">125</option>
+                    <option value="150">150</option>
+                    <option value="200">200</option>
+                </select>
+            </label>
+
+            <label>Или введите свой наружный диаметр (мм):
+                <input type="number" step="0.1" id="custom_outer_diameter">
+            </label>
+
+            <label>Толщина стенки (мм):
+                <input type="number" step="0.1" id="wall_thickness">
+            </label>
+
+            <label>Угол отвода (°):
+                <select id="elbow_angle">
+                    <option value="90">90°</option>
+                    <option value="60">60°</option>
+                    <option value="45">45°</option>
+                </select>
+            </label>
+
+            <label>Слои грунтовки:
+                <input type="number" id="primer_layers" value="1">
+            </label>
+
+            <label>Слои эмали:
+                <input type="number" id="enamel_layers" value="1">
+            </label>
+
+            <label>Проходы растворителем:
+                <input type="number" id="solvent_passes" value="1">
+            </label>
+
+            <button type="submit">Рассчитать</button>
+        </form>
+
+        <div id="results"></div>
+        <a href="index.html">&larr; Назад</a>
+    </div>
+
+    <script>
+        const gostDiameters = {
+            15: 15.0, 20: 20.0, 25: 25.0, 32: 32.0,
+            40: 40.0, 50: 50.0, 65: 65.0, 80: 80.0,
+            100: 100.0, 125: 125.0, 150: 150.0, 200: 200.0
+        };
+
+        document.getElementById('elbowForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            let dn = parseFloat(document.getElementById('nominal_diameter').value);
+            let customD = parseFloat(document.getElementById('custom_outer_diameter').value);
+            let outerD = customD || (dn + 0.8); // +0.8 мм добавка к условному диаметру (упрощение)
+            let wall = parseFloat(document.getElementById('wall_thickness').value);
+            let angle = parseFloat(document.getElementById('elbow_angle').value);
+
+            let primer = parseInt(document.getElementById('primer_layers').value);
+            let enamel = parseInt(document.getElementById('enamel_layers').value);
+            let solvent = parseInt(document.getElementById('solvent_passes').value);
+
+            const DEG_TO_RAD = Math.PI / 180;
+            let innerD = outerD - 2 * wall;
+            let avgD = (outerD + innerD) / 2;
+            let r = 1.5 * outerD;
+            let arcLength = r * DEG_TO_RAD * angle;
+            let area = Math.PI * avgD * arcLength;
+
+            let primerUse = area * 130 / 10000 * primer;
+            let enamelUse = area * 100 / 10000 * enamel;
+            let solventUse = area * 85 / 10000 * solvent;
+
+            let info = `
+                <p>Наружный диаметр: ${outerD.toFixed(1)} мм</p>
+                <p>Внутренний диаметр: ${innerD.toFixed(1)} мм</p>
+                <p>Средний диаметр: ${avgD.toFixed(1)} мм</p>
+                <p>Длина дуги: ${arcLength.toFixed(1)} мм</p>
+                <p>Площадь: ${area.toFixed(2)} мм²</p>
+                <p><strong>Итого: ${(area / 1e6).toFixed(4)} м²</strong></p>
+                <p>Расход грунтовки: ${primerUse.toFixed(2)} г</p>
+                <p>Расход эмали: ${enamelUse.toFixed(2)} г</p>
+                <p>Расход растворителя: ${solventUse.toFixed(2)} г</p>
+            `;
+            if (!customD && dn <= 50) {
+                info += `<p><em>Принято, что DN ${dn} мм = внутренний диаметр по ГОСТ</em></p>`;
+            }
+            document.getElementById('results').innerHTML = `<div class="result">${info}</div>`;
+        });
+    </script>
+</body>
+</html>
