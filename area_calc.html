@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Площадь цилиндра</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="calculator">
+    <h2>Расчёт площади поверхности цилиндра</h2>
+    <label>Радиус (см):</label>
+    <input type="number" id="radius" step="0.1" />
+
+    <label>Высота (см):</label>
+    <input type="number" id="height" step="0.1" />
+
+    <button onclick="calculate()">Рассчитать</button>
+
+    <div class="result" id="result"></div>
+    <a href="index.html">← Назад</a>
+  </div>
+
+  <script>
+    function calculate() {
+      const r = parseFloat(document.getElementById('radius').value);
+      const h = parseFloat(document.getElementById('height').value);
+      if (isNaN(r) || isNaN(h)) return;
+
+      const s = 2 * Math.PI * r * (r + h);
+      document.getElementById('result').innerHTML = 
+        `Площадь поверхности: ${s.toFixed(2)} см²`;
+    }
+  </script>
+</body>
+</html>
