@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Калькулятор труб ГОСТ 3262-75</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>Калькулятор труб по ГОСТ 3262-75</h1>
+    <form id="pipeForm">
+      <label>Выберите типоразмер:
+        <select id="sizeSelect" required>
+          <option value="" disabled selected>-- выбрать --</option>
+          <option value="15x2.8">15 мм × 2.8 мм</option>
+          <option value="20x2.8">20 мм × 2.8 мм</option>
+          <option value="25x3.2">25 мм × 3.2 мм</option>
+          <option value="32x3.2">32 мм × 3.2 мм</option>
+          <option value="40x3.5">40 мм × 3.5 мм</option>
+          <option value="50x3.5">50 мм × 3.5 мм</option>
+        </select>
+      </label>
+      <label>Длина трубы (м):
+        <input type="number" id="length" value="6" required />
+      </label>
+      <button type="submit">Рассчитать</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    const sizes = {
+      "15x2.8": { d: 15, t: 2.8 },
+      "20x2.8": { d: 20, t: 2.8 },
+      "25x3.2": { d: 25, t: 3.2 },
+      "32x3.2": { d: 32, t: 3.2 },
+      "40x3.5": { d: 40, t: 3.5 },
+      "50x3.5": { d: 50, t: 3.5 }
+    };
+
+    document.getElementById("pipeForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const key = document.getElementById("sizeSelect").value;
+      const length = parseFloat(document.getElementById("length").value);
+      const pi = Math.PI;
+
+      if (!sizes[key]) {
+        document.getElementById("result").innerHTML = "<p class='error'>Пожалуйста, выберите типоразмер.</p>";
+        return;
+      }
+
+      const { d, t } = sizes[key];
+      const R = d / 1000 / 2;
+      const r = (d - 2 * t) / 1000 / 2;
+      const V = pi * (R*R - r*r) * length;
+      const mass = V * 7850;
+
+      document.getElementById("result").innerHTML = `
+        <h3>Результаты для трубы ${d}×${t} мм:</h3>
+        <p>Объем металла: ${V.toFixed(4)} м³</p>
+        <p>Масса: ${mass.toFixed(2)} кг</p>
+      `;
+    });
+  </script>
+</body>
+</html>
