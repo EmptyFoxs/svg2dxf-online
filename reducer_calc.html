@@ -18,17 +18,28 @@
     <label>Длина перехода (мм):</label>
     <input type="number" id="length" value="100">
 
-    <label>Толщина стенки (мм):</label>
+    <label>Толщина стенки (мм):
+  <label for="insulation">Толщина изоляции (мм):</label>
+  <input type="number" id="insulation" value="0"><br>
+</label>
     <input type="number" id="thickness" value="4">
 
-    <button onclick="calcReducer()">Рассчитать</button>
+    
+  <label>Слои грунтовки:</label>
+  <input type="number" id="primerLayers" min="1" value="1" oninput="recalculate()">
+  <label>Слои эмали:</label>
+  <input type="number" id="enamelLayers" min="1" value="1" oninput="recalculate()">
+  <label>Проходы растворителем:</label>
+  <input type="number" id="solventPasses" min="1" value="1" oninput="recalculate()">
+
+<button onclick="calcReducer()">Рассчитать</button>
 
     <div class="result" id="result"></div>
     <a href="index.html">← Назад</a>
   </div>
 
   <script>
-    function calcReducer() {
+    function recalculateReducer() {
       const D1 = parseFloat(document.getElementById('d1').value);
       const D2 = parseFloat(document.getElementById('d2').value);
       const L = parseFloat(document.getElementById('length').value);
@@ -44,6 +55,24 @@
         <strong>Итого: ${area_m2.toFixed(4)} м²</strong>
       `;
     }
-  </script>
+  
+  const primer = parseInt(document.getElementById('primerLayers').value);
+  const enamel = parseInt(document.getElementById('enamelLayers').value);
+  const solvent = parseInt(document.getElementById('solventPasses').value);
+
+  const g1 = (area * 130 * primer).toFixed(2);
+  const g2 = (area * 100 * enamel).toFixed(2);
+  const g3 = (area * 85 * solvent).toFixed(2);
+
+  resultDiv.innerHTML += `
+    <p>Площадь покрытия: ${area.toFixed(2)} м²</p>
+    <p>Грунтовка: ${g1} г</p>
+    <p>Эмаль: ${g2} г</p>
+    <p>Растворитель: ${g3} г</p>
+  `;
+
+
+  recalculate();
+</script>
 </body>
 </html>

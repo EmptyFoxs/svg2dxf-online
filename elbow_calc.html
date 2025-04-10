@@ -31,7 +31,10 @@
 
     <label>Или введите свой наружный диаметр (мм):</label>
     <input type="number" id="custom_diameter" step="0.1" oninput="calcElbow()">
-    <label>Толщина стенки (мм):</label>
+    <label>Толщина стенки (мм):
+  <label for="insulation">Толщина изоляции (мм):</label>
+  <input type="number" id="insulation" value="0"><br>
+</label>
     <input type="number" id="thickness" step="0.1" oninput="calcElbow()">
 
     <label>Угол отвода (°):</label>
@@ -42,7 +45,15 @@
       <option value="90" selected>90°</option>
     </select>
 
-    <button onclick="calcElbow()">Рассчитать</button>
+    
+  <label>Слои грунтовки:</label>
+  <input type="number" id="primerLayers" min="1" value="1" oninput="recalculate()">
+  <label>Слои эмали:</label>
+  <input type="number" id="enamelLayers" min="1" value="1" oninput="recalculate()">
+  <label>Проходы растворителем:</label>
+  <input type="number" id="solventPasses" min="1" value="1" oninput="recalculate()">
+
+<button onclick="calcElbow()">Рассчитать</button>
 
     <div class="result" id="result"></div>
     <a href="index.html">← Назад</a>
@@ -67,7 +78,7 @@
       calcElbow();
     }
 
-    function calcElbow() {
+    function recalculateElbow() {
       const customD = parseFloat(document.getElementById('custom_diameter').value);
       let dn = parseFloat(document.getElementById('dn').value);
       if (!isNaN(customD) && customD > 0) dn = customD;
@@ -99,6 +110,24 @@
     }
 
     updateElbow();
-  </script>
+  
+  const primer = parseInt(document.getElementById('primerLayers').value);
+  const enamel = parseInt(document.getElementById('enamelLayers').value);
+  const solvent = parseInt(document.getElementById('solventPasses').value);
+
+  const g1 = (area * 130 * primer).toFixed(2);
+  const g2 = (area * 100 * enamel).toFixed(2);
+  const g3 = (area * 85 * solvent).toFixed(2);
+
+  resultDiv.innerHTML += `
+    <p>Площадь покрытия: ${area.toFixed(2)} м²</p>
+    <p>Грунтовка: ${g1} г</p>
+    <p>Эмаль: ${g2} г</p>
+    <p>Растворитель: ${g3} г</p>
+  `;
+
+
+  recalculate();
+</script>
 </body>
 </html>
