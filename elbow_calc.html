@@ -93,7 +93,8 @@
         Внутренний диаметр: ${innerD.toFixed(1)} мм<br>
         Средний диаметр: ${avgD.toFixed(1)} мм<br>
         Длина дуги: ${arcLength.toFixed(1)} мм<br>
-        Площадь: ${area.toFixed(2)} мм²<br><strong>Итого: ${(area / 1e6).toFixed(4)} м²</strong>
+        Площадь: ${area.toFixed(2)} мм²<br><strong>Итого: ${(area / 1e6).toFixed(4)} м²</strong><br>
+         <em>Принято, что DN ${dn} мм = ${dn <= 50 ? 'внутренний диаметр' : 'наружный диаметр'} по ГОСТ</em>
       `;
     }
 
