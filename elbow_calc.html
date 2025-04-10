@@ -75,9 +75,15 @@
       const thickness = parseFloat(document.getElementById('thickness').value);
       if (isNaN(dn) || isNaN(thickness)) return;
 
-      const outerD = dn;
-      const innerD = dn - 2 * thickness;
-      const avgD = (outerD + innerD) / 2;
+      let outerD, innerD, avgD;
+      if (dn <= 50) {
+        innerD = dn;
+        outerD = innerD + 2 * thickness;
+      } else {
+        outerD = dn;
+        innerD = outerD - 2 * thickness;
+      }
+      avgD = (outerD + innerD) / 2;
       const radius = avgD / 2;
       const arcLength = (Math.PI * radius * angle) / 180;
       const area = Math.PI * avgD * arcLength;
