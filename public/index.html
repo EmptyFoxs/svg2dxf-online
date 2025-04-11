@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>ГОСТ Калькуляторы</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .index-container {
+      max-width: 600px;
+      margin: 60px auto;
+      background-color: white;
+      padding: 35px 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+    .index-container h1 {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .index-container ul {
+      list-style: none;
+      padding: 0;
+    }
+    .index-container li {
+      margin: 12px 0;
+    }
+    .index-container a {
+      color: #007aff;
+      font-size: 18px;
+      text-decoration: none;
+    }
+    .index-container a:hover {
+      text-decoration: underline;
+    }
+
+    /* Стили для фрейма и кнопки */
+    .bonus-button {
+      margin-top: 30px;
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background-color: #28a745;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .bonus-button:hover {
+      background-color: #218838;
+    }
+
+    #fullscreen-game {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="index-container">
+    <h1>ГОСТ Калькуляторы</h1>
+    <ul>
+      <li><a href="gost_pipe.html">Калькулятор труб по ГОСТ</a></li>
+      <li><a href="elbow_calc.html">Расчёт отводов по ГОСТ</a></li>
+      <li><a href="reducer_calc.html">Переходы по ГОСТ</a></li>
+      <li><a href="tee_calc.html">Тройники по ГОСТ</a></li>
+      <li><a href="flange_calc.html">Фланцы по ГОСТ</a></li>
+      <li><a href="cap_calc.html">Заглушки по ГОСТ</a></li>
+    </ul>
+
+    <!-- Кнопка запуска -->
+    <button class="bonus-button" onclick="launchFullscreenGame()">🎮 Бонус: Мини-игра на весь экран</button>
+  </div>
+
+  <!-- Iframe с игрой -->
+  <iframe id="fullscreen-game" src="/game/play/Geometry-Game.html"></iframe>
+
+  <script>
+    function launchFullscreenGame() {
+      document.getElementById('fullscreen-game').style.display = 'block';
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        document.getElementById('fullscreen-game').style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
